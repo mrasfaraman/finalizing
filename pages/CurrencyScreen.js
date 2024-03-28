@@ -59,9 +59,9 @@ const CURRENCIES = [
   },
 ];
 export default function CurrencyScreen({navigation}) {
-  const [currency, setCurrency] = useState('USD $');
-  const [currencycode, setCurrencycode] = useState('usd');
-  const [currencyS, setCurrencyS] = useState('$');
+  const [currency, setCurrency] = useState('');
+  const [currencycode, setCurrencycode] = useState('');
+  const [currencyS, setCurrencyS] = useState('');
 
   const {theme} = useContext(ThemeContext);
   const {t} = useTranslation();
@@ -205,16 +205,8 @@ export default function CurrencyScreen({navigation}) {
           />
         </View>
         <RadioButton.Group
-  onValueChange={(curr) => {
-    const selectedCurrency = CURRENCIES.find((item) => item.currency === curr);
-    if (selectedCurrency) {
-      handleCurrencyChange(curr);
-      handleCurrencycode(selectedCurrency.currencyname);
-      handleCurrencycodeS(selectedCurrency.symbol);
-    }
-  }}
-  value={currency}
->
+          onValueChange={curr => setCurrency(curr)}
+          value={currency}>
           <FlatList data={CURRENCIES} renderItem={renderItem} />
         </RadioButton.Group>
       </View>

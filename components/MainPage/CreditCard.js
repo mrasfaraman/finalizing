@@ -8,20 +8,20 @@ import {
   ImageBackground,
   Clipboard
 } from 'react-native';
-import BackImage from '../../assets/threedotw.png';
+import BackImage from '../../assets/images/doodle.png';
 import ThreeDot from '../../assets/images/three-dot.png';
 import ThreeDotDark from '../../assets/images/three-dot-dark.png';
 import AddressCopy from '../../assets/images/address_copy.png';
-import BuyIcon from '../../assets/images/sendw.png';
-import BuyIconDark from '../../assets/images/sendb.png';
-import SellIcon from '../../assets/images/receivew.png';
-import SellIconDark from '../../assets/images/receiveb.png';
-import SwapIcon from '../../assets/images/swapw.png';
-import SwapIconDark from '../../assets/images/swapb.png';
-import BridgingIcon from '../../assets/images/bridgew.png';
-import BridgingDark from '../../assets/images/bridgeb.png';
-import StakingIcon from '../../assets/images/stakingw.png';
-import StakingDark from '../../assets/images/stakingb.png';
+import BuyIcon from '../../assets/images/buy_icon.png';
+import BuyIconDark from '../../assets/images/buy_icon_dark.png';
+import SellIcon from '../../assets/images/sell_icon.png';
+import SellIconDark from '../../assets/images/sell_icon_dark.png';
+import SwapIcon from '../../assets/images/swap_icon.png';
+import SwapIconDark from '../../assets/images/swap_icon_dark.png';
+import BridgingIcon from '../../assets/images/bridging_icon.png';
+import BridgingDark from '../../assets/images/bridging_icon_dark.png';
+import StakingIcon from '../../assets/images/bottom-center.png';
+import StakingDark from '../../assets/images/bottom-center-dark.png';
 import { ThemeContext } from '../../context/ThemeContext';
 import { DoodleContext } from '../../context/DoodleContext';
 import { getSolBalance, getEVMBalance , getBTCBalance , getdogeBalance, gettronBalance} from '../../utils/function';
@@ -43,7 +43,6 @@ import {
   setUpdateIntervalForType,
   SensorTypes,
 } from 'react-native-sensors';
-import { yellow100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 setUpdateIntervalForType(SensorTypes.accelerometer, 50); 
 
 
@@ -138,24 +137,21 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
         }
       });
   
+      // Cleanup: unsubscribe from accelerometer data when component unmounts
       return () => {
         subscription.unsubscribe();
       };
     }, []);
-    const balanceColor = theme.cardtext;
-    const threeDotImage = require('../../assets/threedotw.png');
 
-    console.log("Doodle----------", doodle)
     return (
     <ImageBackground
       source={doodle}
       resizeMode="cover"
       style={[styles.cardWrapper, { backgroundColor: doodleBG }]}>
-      <View style={styles.overlay} />
       <View style={styles.cardHeader}>
         <View>
 
-          <Text style={[styles.cardAmount, {color: balanceColor}]}>
+          <Text style={[styles.cardAmount, {color: theme.cardtext}]}>
             {address?.length === 23 ? (
               'Account Not Available'
             ) : (
@@ -175,13 +171,11 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
         </View>
         <View>
           <TouchableOpacity
-            style={[styles.threeDotSpace]}
+            style={styles.threeDotSpace}
             onPress={() => {
               !isOpen ? getOpenCustomizer(!customizerVal) : null;
             }}>
-            <Image source={threeDotImage} 
-              style={{ width: 20, height: 20 }} 
-            />
+            <Image source={theme.type == 'dark' ? ThreeDot : ThreeDotDark} />
           </TouchableOpacity>
         </View>
       </View>
@@ -221,14 +215,11 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
                 styles.cardBtnsWrapper,
                 { backgroundColor: theme.rightArrowBG },
               ]}>
-              <Image
-  source={theme.type === 'dark' ? BuyIcon : BuyIconDark}
-  style={{ width: 23, height: 23 }}
-/>
+              <Image source={theme.type == 'dark' ? BuyIcon : BuyIconDark} />
             </View>
           </TouchableOpacity>
           <View>
-          <Text style={[styles.btnsLabel, {color: balanceColor}]}>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
           {t('send')}</Text>
           </View>
         </View>
@@ -239,53 +230,49 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
                 styles.cardBtnsWrapper,
                 { backgroundColor: theme.rightArrowBG },
               ]}>
-              <Image source={theme.type == 'dark' ? SellIcon : SellIconDark}
-              style={{ width: 23, height: 23 }} />
+              <Image source={theme.type == 'dark' ? SellIcon : SellIconDark} />
             </View>
           </TouchableOpacity>
           <View>
-          <Text style={[styles.btnsLabel, {color: balanceColor}]}>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
           {t('receive')}</Text>
           </View>
         </View>
         {activeNet?.type === "btc" || activeNet?.type === "tron" || activeNet?.type === "doge" ? 
         <>
-            {/* <View>
-            <TouchableOpacity disabled onPress={() => {activeNet?.type === "evm" ? navigation.navigate('swapevm'):navigation.navigate('Swap')}}>
-              <View
-                style={[
-                  styles.cardBtnsWrapper,
-                  { backgroundColor: theme.rightArrowBG },
-                ]}>
-                <Image source={theme.type == 'dark' ? SwapIcon : SwapIconDark} 
-                  style={{ width: 23, height: 23 }}
-                />
-              </View>
-            </TouchableOpacity>
-            <View>
-            <Text style={[styles.btnsLabel, {color: balanceColor}]}>
-            {t('swap')}</Text>
+          {/* <View>
+          <TouchableOpacity disabled onPress={() => {activeNet?.type === "evm" ? navigation.navigate('swapevm'):navigation.navigate('Swap')}}>
+            <View
+              style={[
+                styles.cardBtnsWrapper,
+                { backgroundColor: theme.rightArrowBG },
+              ]}>
+              <Image source={theme.type == 'dark' ? SwapIcon : SwapIconDark} />
             </View>
-          </View>
+          </TouchableOpacity>
           <View>
-            <TouchableOpacity disabled onPress={() => navigation.navigate('Bridging')}>
-              <View
-                style={[
-                  styles.cardBtnsWrapper,
-                  { backgroundColor: theme.rightArrowBG },
-                ]}>
-                <Image
-                  source={theme.type == 'dark' ? BridgingIcon : BridgingDark}
-                  style={{ width: 20, height: 20 }}
-                />
-              </View>
-            </TouchableOpacity>
-            <View>
-            <Text style={[styles.btnsLabel, {color: balanceColor}]}>
-            {t('bridging')}
-              </Text>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
+          {t('swap')}</Text>
+          </View>
+        </View>
+        <View>
+          <TouchableOpacity disabled onPress={() => navigation.navigate('Bridging')}>
+            <View
+              style={[
+                styles.cardBtnsWrapper,
+                { backgroundColor: theme.rightArrowBG },
+              ]}>
+              <Image
+                source={theme.type == 'dark' ? BridgingIcon : BridgingDark}
+              />
             </View>
-          </View> */}
+          </TouchableOpacity>
+          <View>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
+          {t('bridging')}
+            </Text>
+          </View>
+        </View> */}
     
         </>
         :
@@ -297,12 +284,11 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
                 styles.cardBtnsWrapper,
                 { backgroundColor: theme.rightArrowBG },
               ]}>
-              <Image source={theme.type == 'dark' ? SwapIcon : SwapIconDark}
-              style={{ width: 23, height: 23 }} />
+              <Image source={theme.type == 'dark' ? SwapIcon : SwapIconDark} />
             </View>
           </TouchableOpacity>
           <View>
-          <Text style={[styles.btnsLabel, {color: balanceColor}]}>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
           {t('swap')}</Text>
           </View>
         </View>
@@ -315,13 +301,11 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
               ]}>
               <Image
                 source={theme.type == 'dark' ? BridgingIcon : BridgingDark}
-                style={{ width: 20, height: 20 }}
-
               />
             </View>
           </TouchableOpacity>
           <View>
-          <Text style={[styles.btnsLabel, {color: balanceColor}]}>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
           {t('bridging')}
             </Text>
           </View>
@@ -339,14 +323,12 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
                 { backgroundColor: theme.rightArrowBG },
               ]}>
               <Image
-                source={theme.type == 'dark' ? StakingIcon : StakingDark }
-                style={{ width: 26, height: 26 }}
-
+                source={theme.type == 'dark' ? StakingIcon : StakingDark   }
               />
             </View>
           </TouchableOpacity>
           <View>
-          <Text style={[styles.btnsLabel, {color: balanceColor}]}>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
           {t('staking')}
             </Text>
           </View>
@@ -362,13 +344,12 @@ const CreditCard = ({ getOpenCustomizer, customizerVal, navigation, isOpen, acti
                 { backgroundColor: theme.rightArrowBG },
               ]}>
               <Image
-                source={theme.type == 'dark' ? StakingIcon : StakingDark}
-                style={{ width: 26, height: 26 }}
+                source={theme.type == 'dark' ? StakingIcon : StakingDark   }
               />
             </View>
           </TouchableOpacity>
           <View>
-          <Text style={[styles.btnsLabel, {color: balanceColor}]}>
+          <Text style={[styles.btnsLabel, {color: theme.cardtext}]}>
           {t('staking')}
             </Text>
           </View>
@@ -389,13 +370,6 @@ const styles = StyleSheet.create({
     // backgroundColor: "#104a5c",
     borderRadius: 15,
     marginTop: 20,
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
-    // backgroundColor: "#104a5c",
-    borderRadius: 15,
   },
   cardHeader: {
     flexDirection: 'row',

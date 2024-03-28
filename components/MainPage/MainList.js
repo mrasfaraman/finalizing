@@ -56,26 +56,25 @@ const MainList = ({ navigation }) => {
     }, []);
 
     const tokenevmUpdate = async (item, index) => {
-      let responce = await importEVMToken(address.replace(/^"|"$/g, ''), activeNet?.nodeURL, activeNet?.networkName, item.token_address);
-      updateToken(index, responce.data)
+        let responce = await importEVMToken(address.replace(/^"|"$/g, ''), activeNet?.nodeURL, activeNet?.networkName, item.token_address);
+        updateToken(index, responce.data)
+        // if (!responce) {
+        //   
+        //   updateToken(index, item)
+        // } else {
+        // }
+    }
+    const tokentronUpdate = async (item, index) => {
+      console.log("TRON Update",address.replace(/^"|"$/g, '') , item.token_address)
+      let responce = await importTronToken(address.replace(/^"|"$/g, '') , item.token_address);
+      console.log(">>>>>>>>>>",responce)
+      updateToken(index, responce)
       // if (!responce) {
       //   
       //   updateToken(index, item)
       // } else {
       // }
   }
-  const tokentronUpdate = async (item, index) => {
-    console.log("TRON Update",address.replace(/^"|"$/g, '') , item.token_address)
-
-    let responce = await importTronToken(address.replace(/^"|"$/g, '') , item.token_address);
-    console.log(">>>>>>>>>>",responce)
-    updateToken(index, responce)
-    // if (!responce) {
-    //   
-    //   updateToken(index, item)
-    // } else {
-    // }
-}
 
     const tokensolUpdate = async (item, index) => {
 
@@ -91,24 +90,23 @@ const MainList = ({ navigation }) => {
 
 
     useEffect(() => {
-      console.log(Tokens)
-      const timeoutId = setTimeout(() => {
-          Tokens.map((item, index) => {
-              let solActive = item?.rpc === undefined ? activeNet?.type === "solana" : false;
-              if (activeNet?.type === "solana") {
-                  if (solActive) {
-                      tokensolUpdate(item, index)
-                  }
-                }else if (item?.rpc == 'https://api.trongrid.io') {
-                  tokentronUpdate(item, index)
-              } else if (item?.rpc == activeNet?.nodeURL) {
-                  tokenevmUpdate(item, index)
-              }
-          })
-      }, 1000);
-      return () => clearTimeout(timeoutId);
-  }, [selectedAccount, address ])
-
+        console.log(Tokens)
+        const timeoutId = setTimeout(() => {
+            Tokens.map((item, index) => {
+                let solActive = item?.rpc === undefined ? activeNet?.type === "solana" : false;
+                if (activeNet?.type === "solana") {
+                    if (solActive) {
+                        tokensolUpdate(item, index)
+                    }
+                  }else if (item?.rpc == 'https://api.trongrid.io') {
+                    tokentronUpdate(item, index)
+                } else if (item?.rpc == activeNet?.nodeURL) {
+                    tokenevmUpdate(item, index)
+                }
+            })
+        }, 1000);
+        return () => clearTimeout(timeoutId);
+    }, [selectedAccount, address ])
 
 
 
@@ -133,6 +131,7 @@ const MainList = ({ navigation }) => {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
           setAddress(JSON.stringify(activeNet?.type === 'solana' ? selectedAccount.solana.publicKey : activeNet?.type === 'btc' ? selectedAccount.btc.address :  activeNet?.type === 'tron' ? selectedAccount.tron.address :  activeNet?.type === 'doge' ? selectedAccount.doge.address : selectedAccount.evm.address));
+            // setAddress(JSON.stringify(activeNet?.type === 'solana' ? selectedAccount.solana.publicKey : selectedAccount.evm.address));
         }, 1000);
         return () => clearTimeout(timeoutId);
     }, [activeNet, selectedAccount]);
@@ -173,7 +172,8 @@ const MainList = ({ navigation }) => {
                     <View>
                         {/* <Image source={TwoCoinGraph} alt="grapg" /> */}
                     </View>
-                    {activeNet?.type === "tron" ? 
+
+                {activeNet?.type === "tron" ? 
                 <>
                 <View>
                         <Text style={[styles.thirdCoinListDollar, { color: theme.text }]}> 
@@ -193,10 +193,11 @@ const MainList = ({ navigation }) => {
             </TouchableOpacity>
         )
     }
+
     return (
       <View style={styles.mainWrapper}>
        
-       {activeNet?.type == 'evm' || activeNet?.type == 'solana' || activeNet?.type == 'tron' ? (
+        {activeNet?.type == 'evm' || activeNet?.type == 'solana' || activeNet?.type == 'tron' ? (
         <View style={styles.mainListHeader}>
           <TouchableOpacity
             style={[

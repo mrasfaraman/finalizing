@@ -98,6 +98,7 @@ const Token = ({navigation}) => {
         setLoader(true)
         
         let responce = await importTronToken(walletAddress , tokenDetail.tokenAddress );
+        console.log(responce)
         if(!responce){
           setLoader(false)
           Toast.show({
@@ -174,7 +175,6 @@ const Token = ({navigation}) => {
                 styles.inpWrapper,
                 {
                   backgroundColor: theme.menuItemBG,
-                  color: theme.text,
                   paddingVertical: 20,
                   borderColor: theme.addButtonBorder,
                   borderWidth: 1,
@@ -190,7 +190,6 @@ const Token = ({navigation}) => {
                 styles.inpWrapper,
                 {
                   backgroundColor: theme.menuItemBG,
-                  color: theme.text,
                   paddingVertical: 25,
                   borderColor: theme.addButtonBorder,
                   borderWidth: 1,
@@ -206,7 +205,6 @@ const Token = ({navigation}) => {
                 styles.inpWrapper,
                 {
                   backgroundColor: theme.menuItemBG,
-                  color: theme.text,
                   paddingVertical: 25,
                   borderColor: theme.addButtonBorder,
                   borderWidth: 1,

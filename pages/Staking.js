@@ -29,6 +29,7 @@ const Staking = ({navigation}) => {
       useEffect(() => {
         getNetworkactive()
     }, [selectedNetwork,setActiveNet])
+
     const StakingCard = (item) => {
         // console.log(item.item.item)
         if(item.item.index !== 3 && item.item.index !== 0){

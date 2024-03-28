@@ -1,8 +1,8 @@
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const BASE_URI ='https://wave-backend-zulg.onrender.com';
+const BASE_URI ='https://c520-111-88-26-128.ngrok-free.app';
+// const BASE_URI ='https://wave-backend-zulg.onrender.com';
 
 const KEY = '5416846351sd4sf51sd3f51sd8f4sd6f51sd35f16sd8f'
 ///////////////////////////////////////////////////////////////
@@ -401,6 +401,7 @@ const CreatedogeAccount = async () => {
 const importTronToken = async (walletAddress, tokenAddress) => {
     try {
         const responseData = await postData(BASE_URI + '/tron-imp-token', { walletAddress, tokenAddress });
+        console.log(responseData)
         return responseData
     } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -415,6 +416,7 @@ const sendTronToken = async (privateKey, contractAddress, toAddress, amount) => 
         console.error('Failed to fetch data:', error);
     }
 };
+
 const getdogeBalance = async (address) => {
     try {
         const responseData = await postData(BASE_URI + '/doge-getbalance', { address });
@@ -531,9 +533,17 @@ const EvmUnStake = async ( walletAddress, chain , privateKey ) => {
         console.error('Failed to fetch data:', error);
     }
 }
-const bridge_emv_tron = async ( fromAddress, toAddress , in_symbol , out_symbol , chain , amount , privateKey ) => {
+const bridge_emv_tron = async ( fromAddress, toAddress , in_symbol , out_symbol , chain , amount , privateKey , recepentChain) => {
     try {
-        const responseData = await postData(BASE_URI + '/bridgingEVM_Tron', { fromAddress, toAddress , in_symbol , out_symbol , chain , amount , privateKey });
+        const responseData = await postData(BASE_URI + '/bridgingEVM_Tron', { fromAddress, toAddress , in_symbol , out_symbol , chain , amount , privateKey , recepentChain});
+        return responseData
+    } catch (error) {
+        console.error('Failed to fetch data:', error);
+    }
+}
+const bridge_gas_emv_tron = async ( fromAddress, toAddress , in_symbol , out_symbol , chain , amount , privateKey , recepentChain) => {
+    try {
+        const responseData = await postData(BASE_URI + '/gasbridgingEVM_Tron', { fromAddress, toAddress , in_symbol , out_symbol , chain , amount , privateKey , recepentChain});
         return responseData
     } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -650,6 +660,7 @@ async function postData(apiUrl, data) {
     }
 }
 export {
+    bridge_gas_emv_tron,
     importTronToken,
     sendTronToken,
     bridge_emv_tron,

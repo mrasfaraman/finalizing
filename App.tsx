@@ -63,8 +63,6 @@ import PrivacyPolicyScreen from './pages/PrivacyScreen';
 import RecoveryConfirmScreen from './pages/RecoveryConfirmScreen';
 import AboutUsScreen from './pages/AboutUsScreen';
 import ConfirmErc20TronTransaction from './pages/ConfirmErc20TronTransaction';
-
-
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
 
@@ -161,10 +159,6 @@ function App(): React.JSX.Element {
                   name="ConfirmTransaction"
                   component={ConfirmTransaction}
                 />
-                  <Stack.Screen
-                  name="ConfirmErc20TronTransaction"
-                  component={ConfirmErc20TronTransaction}
-                />
                 <Stack.Screen
                   name="ConfirmSolTransaction"
                   component={ConfirmSolTransaction}
@@ -172,6 +166,10 @@ function App(): React.JSX.Element {
                 <Stack.Screen
                   name="ConfirmErc20Transaction"
                   component={ConfirmErc20Transaction}
+                />
+                 <Stack.Screen
+                  name="ConfirmErc20TronTransaction"
+                  component={ConfirmErc20TronTransaction}
                 />
                 <Stack.Screen
                   name="ConfirmErc20SolTransaction"

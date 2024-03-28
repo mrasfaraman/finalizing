@@ -30,6 +30,7 @@ import {
   importEVMToken,
   importSolToken,
   bridge_emv_tron,
+  bridge_gas_emv_tron
 } from '../utils/function';
 import {
   ALERT_TYPE,
@@ -42,7 +43,7 @@ const Stable_Tokens = [
   //Tron
   {
     balance: '0',
-    address: 'TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9',
+    address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
     coingekoId: 'tether',
     rpc: 'https://api.trongrid.io',
     decimals: 6,
@@ -50,16 +51,18 @@ const Stable_Tokens = [
     name: 'Tether',
     symbol: 'USDT',
   },
+  
   {
-    balance: '0',
-    address: 'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT',
-    coingekoId: 'binance-usd',
-    rpc: 'https://api.trongrid.io',
-    decimals: 18,
-    logo: 'https://assets.coingecko.com/coins/images/9576/large/BUSD.png?1568947766',
-    name: 'Binance USD',
-    symbol: 'BUSD',
-  },
+  balance: "0",
+  coingeckoId: "usd-coin",
+  decimals: 6,
+  logo: "https://assets.coingecko.com/coins/images/6319/large/usdc.png?1696506694",
+  name: "USD Coin", 
+  rpc: "https://api.trongrid.io",
+  symbol: "USDC",
+  token_address: "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+  totalSupply: {"hex": "0x970e698d2f1a", "type": "BigNumber"}, "wallet_address": "TAy2wJMwTVV1wq6YB2hZEhQfSr2G17JkcP"}
+  ,
 
   //Solana
   {
@@ -73,28 +76,19 @@ const Stable_Tokens = [
     symbol: 'usdc',
   },
   // Binance Smart
-  {
-    balance: '0.',
-    coingekoId: 'wbnb',
-    decimals: '18',
-    logo: 'https://assets.coingecko.com/coins/images/12591/large/binance-coin-logo.png?1696512401',
-    name: 'Wrapped BNB',
-    rpc: 'https://bsc.publicnode.com',
-    symbol: 'WBNB',
-    token_address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    wallet_address: '0xeB537669D85b53435D0fFb87CE425FF5B182e419',
-  },
-  {
-    balance: '0.',
-    coingekoId: 'Ethereum Token',
-    decimals: '18',
-    logo: 'https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628',
-    name: 'Ethereum Token',
-    rpc: 'https://bsc.publicnode.com',
-    symbol: 'ETH',
-    token_address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-    wallet_address: '0xeB537669D85b53435D0fFb87CE425FF5B182e419',
-  },
+
+  // {
+  //   balance: '0.',
+  //   coingekoId: 'wbnb',
+  //   decimals: '18',
+  //   logo: 'https://assets.coingecko.com/coins/images/12591/large/binance-coin-logo.png?1696512401',
+  //   name: 'Wrapped BNB',
+  //   rpc: 'https://bsc.publicnode.com',
+  //   symbol: 'WBNB',
+  //   token_address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+  //   wallet_address: '0xeB537669D85b53435D0fFb87CE425FF5B182e419',
+  // },
+ 
   {
     balance: '0.',
     coingekoId: 'Tether USD',
@@ -118,17 +112,6 @@ const Stable_Tokens = [
     rpc: 'https://eth.drpc.org',
     symbol: 'USDT',
     token_address: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-    wallet_address: '0xeB537669D85b53435D0fFb87CE425FF5B182e419',
-  },
-  {
-    balance: '0.',
-    coingekoId: 'BNB',
-    decimals: '18',
-    name: 'BNB',
-    logo: 'https://imgs.search.brave.com/LIeV84--gK-9SOLfJxQ-YtBJMp5dh8pu8W26RmXH_hE/rs:fit:40:40:1/g:ce/aHR0cHM6Ly9hc3Nl/dHMuY29pbmdlY2tv/LmNvbS9jb2lucy9p/bWFnZXMvODI1L2xh/cmdlL2JuYi1pY29u/Ml8yeC5wbmc_MTY5/NjUwMTk3MA',
-    rpc: 'https://eth.drpc.org',
-    symbol: 'BNB',
-    token_address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
     wallet_address: '0xeB537669D85b53435D0fFb87CE425FF5B182e419',
   },
   {
@@ -328,80 +311,97 @@ const Bridging = ({navigation}) => {
 
   const bridged = async () => {
     if (activeNet?.type == 'evm') {
-      if (slectedNetUp?.type == 'evm' && slectedNetDown?.type == 'tron') {
-        // console.log(inputUp);
-        // console.log(slectedNetUp?.nodeURL);
-        // console.log(slectedNetDown?.nodeURL);
-        // console.log(topToken?.address || topToken?.token_address);
-        // console.log(bottomToken?.address || bottomToken?.token_address);
-        // console.log(topToken?.symbol);
-        // console.log(bottomToken?.symbol);
-        // console.log(address.replace(/^"|"$/g, ''));
-        // console.log(selectedAccount?.evm?.privateKey);
-        if(ballanceUp < inputUp){
-          Dialog.show({
-            type: ALERT_TYPE.SUCCESS,
-            title: 'Confirmation',
-            textBody: 'Are You Sure You Want to Bridge Token!',
-            button: 'Confirm Bridge',
-            onPressButton: async () => {
-              try {
-                setLoading(true)
-                let responce = await bridge_emv_tron(
-                  topToken?.address || topToken?.token_address,
-                  bottomToken?.address || bottomToken?.token_address,
-                  topToken?.symbol,
-                  bottomToken?.symbol,
-                  slectedNetUp?.nodeURL,
-                  inputUp,
-                  selectedAccount?.evm?.privateKey,
-                );
-                console.log(responce)
-                if (responce) {
-                  setLoading(false)
-                  Toast.show({
-                    type: ALERT_TYPE.SUCCESS,
-                    title: 'Transaction Sucessfull',
-                    textBody: 'Congrats Your Transaction Sucessfully Completed',
-                  })
-                  navigation.navigate("MainPage")
-                }else{
-                  Toast.show({
-                    type: ALERT_TYPE.INFO,
-                    title: 'Network Error',
-                    textBody: 'Network Issue Try Again Later',
-                  })
-                  setLoading(false)
-                }
-              } catch (error) {
+      setLoading(true)
+      let responceGas = await bridge_gas_emv_tron(
+        topToken?.address || topToken?.token_address,
+        bottomToken?.address || bottomToken?.token_address,
+        topToken?.symbol,
+        bottomToken?.symbol,
+        slectedNetUp,
+        inputUp,
+        selectedAccount?.evm?.privateKey,
+        slectedNetDown
+      );
+      console.log(">>>>>>>>>>",responceGas)
+      if(ballanceUp < inputUp){
+        setLoading(false)
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Confirmation',
+          textBody: `Are You Sure You Want to Bridge Token! \n Platform Fee: ${Number(responceGas?.getFee)?.toFixed(5)} ${slectedNetUp?.symbol} \n Estimated Time: ${Number(responceGas?.time)} Min`,
+          button: 'Confirm Bridge',
+          onPressButton: async () => {  
+            try {
+              setLoading(true)
+              let responce = await bridge_emv_tron(
+                topToken?.address || topToken?.token_address,
+                bottomToken?.address || bottomToken?.token_address,
+                topToken?.symbol,
+                bottomToken?.symbol,
+                slectedNetUp,
+                inputUp,
+                selectedAccount?.evm?.privateKey,
+                slectedNetDown
+              );
+              console.log(">>>>>>>>>>",responce)
+              if (responce) {
                 setLoading(false)
                 Toast.show({
-                  type: ALERT_TYPE.WARNING,
-                  title: 'Network Error',
-                  textBody: 'Network Not Responding.',
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Transaction Sucessfull',
+                  textBody: 'Congrats Your Transaction Sucessfully Completed',
                 })
+                navigation.navigate("MainPage")
+              }else{
+                Toast.show({
+                  type: ALERT_TYPE.INFO,
+                  title: 'insufficient balance',
+                  textBody: 'insufficient balance for Bridging / Network Error',
+                })
+                setLoading(false)
               }
-              Dialog.hide();
-            },
-          });
-          
-        }else{
-          Toast.show({
-            type: ALERT_TYPE.WARNING,
-            title: 'insufficient balance',
-            textBody: 'insufficient balance for Bridging',
-          });
-        }
+            } catch (error) {
+              setLoading(false)
+              Toast.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Network Error',
+                textBody: 'Network Not Responding.',
+              })
+            }
+
+            Dialog.hide()
+          },
+        });
+        
+      }else{
+        setLoading(false)
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'insufficient balance',
+          textBody: 'insufficient balance for Bridging',
+        });
+      }
+      // if (slectedNetUp?.type == 'evm' && slectedNetDown?.type == 'tron') {
+      //   // console.log(inputUp);
+      //   // console.log(slectedNetUp?.nodeURL);
+      //   // console.log(slectedNetDown?.nodeURL);
+      //   // console.log(topToken?.address || topToken?.token_address);
+      //   // console.log(bottomToken?.address || bottomToken?.token_address);
+      //   // console.log(topToken?.symbol);
+      //   // console.log(bottomToken?.symbol);
+      //   // console.log(address.replace(/^"|"$/g, ''));
+      //   // console.log(selectedAccount?.evm?.privateKey);
+      
 
         
 
-      } else {
-        Toast.show({
-          type: ALERT_TYPE.WARNING,
-          title: 'Invalid',
-          textBody: 'Selact Valid Network or Token',
-        });
-      }
+      // } else {
+      //   Toast.show({
+      //     type: ALERT_TYPE.WARNING,
+      //     title: 'Invalid',
+      //     textBody: 'Selact Valid Network or Token',
+      //   });
+      // }
     } else {
       Toast.show({
         type: ALERT_TYPE.WARNING,
@@ -542,7 +542,8 @@ const Bridging = ({navigation}) => {
               data={Networks}
               keyExtractor={(item, index) => item.id || index.toString()}
               renderItem={({item, index}) => {
-                if (index !== 1 && index !== 0 && index !== 4) {
+                // && index !== 4 && index !== 3
+                if (index !== 1 && index !== 0 ) {
                   return;
                 } else if (item == slectedNetDown) {
                   return;
@@ -925,7 +926,7 @@ const Bridging = ({navigation}) => {
               data={Networks}
               keyExtractor={(item, index) => item.id || index.toString()}
               renderItem={({item, index}) => {
-                if (index !== 1 && index !== 0 && index !== 4) {
+                if (index !== 1 && index !== 0 && index !== 4 && index !== 3) {
                   return;
                 } else if (item == slectedNetDown) {
                   return;
